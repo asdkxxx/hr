@@ -1,9 +1,18 @@
-from django.urls import path
-from .views import CompanyRegistrationView, CompanyLoginView
+# companies/urls.py
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import (
+    CompanyRegistrationView, CompanyLoginView, CompanyViewSet,
+    VacancyViewSet, ResponseListView
+)
+
+router = DefaultRouter()
+router.register(r'profile', CompanyViewSet, basename='company')
+router.register(r'vacancies', VacancyViewSet, basename='vacancy')
 
 urlpatterns = [
-    # Теперь POST /api/companies/register
     path('register/', CompanyRegistrationView.as_view(), name='company-register'),
-    # Теперь POST /api/companies/login
     path('login/', CompanyLoginView.as_view(), name='company-login'),
+    path('responses/', ResponseListView.as_view(), name='response-list'),
+    path('', include(router.urls)),
 ]
